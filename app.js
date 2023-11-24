@@ -44,6 +44,17 @@ const getRowAndCol = (cell) => {
     return [rowIndex, colIndex];
 };
 
+//find first availble cell of col
+const getFirstOpenCellInCol = (colIndex) => {
+    const col = columns[colIndex].slice(0, 6); //remove the top cell from col
+    for(const cell of col){
+        const cellClassList = getClassList(cell);
+        if(!cellClassList.includes('yellow') && !cellClassList.includes('red')){//it's a first empty cell
+            return cell;
+        } 
+    }
+    return null;
+};
 
 //event handlers
 const handleHover = (e) => {
@@ -64,14 +75,20 @@ const handleMouseOut = (e) => {
 };
 
 
-
+const handleCellClick = (e) => {
+    const cell = e.target;
+    const [rowIndex, colIndex] = getRowAndCol(cell);
+    
+    getFirstOpenCellInCol(colIndex);
+    
+};
 
 //event listeners
 for(const row of rows){
     for(const cell of row){
         cell.addEventListener('mouseover', handleHover);
         cell.addEventListener('mouseout', handleMouseOut);
-
+        cell.addEventListener('click', handleCellClick);
 
     }
 }
