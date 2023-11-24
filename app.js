@@ -38,21 +38,41 @@ const getRowAndCol = (cell) => {
     const cellClassList = getClassList(cell);
     const row = cellClassList.find(className => className.includes('row'));
     const col = cellClassList.find(className => className.includes('col'));
-    console.log("row class: " + row);
-    console.log("col class: " + col);
+    const rowIndex = parseInt(row[4], 10);
+    const colIndex = parseInt(col[4], 10);
 
+    return [rowIndex, colIndex];
 };
 
 
 //event handlers
 const handleHover = (e) => {
-    getRowAndCol(e.target)
+    const cell = e.target;
+    const [rowIndex, colIndex] = getRowAndCol(cell);
+    console.log(rowIndex, colIndex);
+
+    const topCell = topCells[colIndex];
+    topCell.classList.add( yellowNext ? 'yellow': 'red')
 }
+
+const handleMouseOut = (e) => {
+    const cell = e.target;
+    const [rowIndex, colIndex] = getRowAndCol(cell);
+    const topCell = topCells[colIndex];
+    topCell.classList.remove('yellow');
+    topCell.classList.remove('red');
+};
+
+
 
 
 //event listeners
 for(const row of rows){
     for(const cell of row){
-        cell.addEventListener('mouseover', handleHover)
+        cell.addEventListener('mouseover', handleHover);
+        cell.addEventListener('mouseout', handleMouseOut);
+
+
     }
 }
+
