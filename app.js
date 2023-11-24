@@ -62,11 +62,60 @@ const clearTopCellClass = (colIndex) => {
     topCell.classList.remove('red');
 };
 
+const getColorOfCell = (cell) =>{
+    return getClassList(cell).includes('red') ? 'red' : getClassList(cell).includes('yellow') ? 'yellow' : null;
+}
+
+
+const checkWinningCells = (cells) =>{
+    if(cells.length < 4) return;
+    gameActive = false; //we have a horizonal winner
+    for(const cell of cells){
+        cell.classList.add('win')
+    };
+    statusSpan.textContent = `${yellowNext ? 'Yellow' : 'Red'} Won!`;
+};
+
+const checkGameState = (cell) =>{
+    //check to see if there are 4 or more in a row, horizontally or diagonally
+    const color = getColorOfCell(cell);
+    console.log('>>>color' + color);
+    if(!color) return;
+
+    //check horizontally
+    const [rowIndex, colIndex] = getRowAndCol(cell);
+    let winningCells = [cell];
+    let rowToCheck = rowIndex;
+    let colToCheck = colIndex -1; //check left col
+    while(colToCheck>=0){
+        const cellToCheck = rows[rowToCheck][colToCheck];
+        if(getColorOfCell(cellToCheck) === color){
+            console.log('gets here');
+            winningCells.push(cellToCheck);
+            colToCheck--; //go left
+        } else {
+            break;
+        }
+    }
+    //check right
+    colToCheck = colIndex+1;
+    while(colToCheck<= 6){
+        const cellToCheck = rows[rowToCheck][colToCheck];
+        if(getColorOfCell(cellToCheck) === color){
+            winningCells.push(cellToCheck);
+            colToCheck++; //move right
+        } else{
+            break;
+        }
+    }
+
+    checkWinningCells(winningCells)
+};
+
 ////event handlers
 const handleHover = (e) => {
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
-    console.log(rowIndex, colIndex);
 
     const topCell = topCells[colIndex];
     topCell.classList.add( yellowNext ? 'yellow': 'red')
@@ -92,7 +141,7 @@ const handleCellClick = (e) => {
 
     openCell.classList.add(yellowNext ? 'yellow' : 'red');
     //TODO: check game state
-    //TODO: change the top puck color based on turn
+    checkGameState(openCell);
     //turn flip
     yellowNext = !yellowNext;
 
