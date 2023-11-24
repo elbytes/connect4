@@ -29,5 +29,30 @@ const rows = [row0, row1, row2, row3, row4, row5, topRow];
 let gameActive = true;
 let yellowNext = true; //yellow goes first
 
+//util funcs
+const getClassList = (cell) => {
+    return [... cell.classList]
+};
+
+const getRowAndCol = (cell) => {
+    const cellClassList = getClassList(cell);
+    const row = cellClassList.find(className => className.includes('row'));
+    const col = cellClassList.find(className => className.includes('col'));
+    console.log("row class: " + row);
+    console.log("col class: " + col);
+
+};
+
 
 //event handlers
+const handleHover = (e) => {
+    getRowAndCol(e.target)
+}
+
+
+//event listeners
+for(const row of rows){
+    for(const cell of row){
+        cell.addEventListener('mouseover', handleHover)
+    }
+}
