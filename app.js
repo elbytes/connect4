@@ -114,6 +114,7 @@ const checkGameState = (cell) =>{
 
 ////event handlers
 const handleHover = (e) => {
+    if(!gameActive) return;
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
 
@@ -129,6 +130,7 @@ const handleMouseOut = (e) => {
 
 
 const handleCellClick = (e) => {
+    if(!gameActive) return;
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
     
