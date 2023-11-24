@@ -25,11 +25,11 @@ const row4 = [allCells[28], allCells[29], allCells[30], allCells[31], allCells[3
 const row5 = [allCells[35], allCells[36], allCells[37], allCells[38], allCells[39], allCells[40], allCells[41]];
 const rows = [row0, row1, row2, row3, row4, row5, topRow];
 
-//vars
+////vars
 let gameActive = true;
 let yellowNext = true; //yellow goes first
 
-//util funcs
+////util funcs
 const getClassList = (cell) => {
     return [... cell.classList]
 };
@@ -56,7 +56,13 @@ const getFirstOpenCellInCol = (colIndex) => {
     return null;
 };
 
-//event handlers
+const clearTopCellClass = (colIndex) => {
+    const topCell = topCells[colIndex];
+    topCell.classList.remove('yellow');
+    topCell.classList.remove('red');
+};
+
+////event handlers
 const handleHover = (e) => {
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
@@ -69,9 +75,7 @@ const handleHover = (e) => {
 const handleMouseOut = (e) => {
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
-    const topCell = topCells[colIndex];
-    topCell.classList.remove('yellow');
-    topCell.classList.remove('red');
+    clearTopCellClass(colIndex);
 };
 
 
@@ -79,7 +83,23 @@ const handleCellClick = (e) => {
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
     
-    getFirstOpenCellInCol(colIndex);
+    const openCell = getFirstOpenCellInCol(colIndex);
+
+    if(!openCell){ //returns null, no open cells
+        console.log('end of col');
+        return;
+    } 
+
+    openCell.classList.add(yellowNext ? 'yellow' : 'red');
+    //TODO: check game state
+    //TODO: change the top puck color based on turn
+    //turn flip
+    yellowNext = !yellowNext;
+
+    //change top puck color based on turn
+    clearTopCellClass(colIndex);
+    const topCell = topCells[colIndex];
+    topCell.classList.add(yellowNext ? 'yellow' : 'red')
     
 };
 
