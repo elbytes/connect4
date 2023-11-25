@@ -83,6 +83,7 @@ const checkGameState = (cell) =>{
     console.log('>>>color' + color);
     if(!color) return;
 
+
     //check horizontally
     const [rowIndex, colIndex] = getRowAndCol(cell);
     let winningCells = [cell];
@@ -113,6 +114,7 @@ const checkGameState = (cell) =>{
     let isWinningStatus = checkWinningCells(winningCells);
     if(isWinningStatus) return;
 
+
     //check vertically
     winningCells = [cell];
     rowToCheck = rowIndex-1;
@@ -137,9 +139,83 @@ const checkGameState = (cell) =>{
         }
     }
 
-    if(checkWinningCells(winningCells)){
-        return;
-    }
+    if(checkWinningCells(winningCells)) return;
+
+
+
+     //check diagonally bottom left to top right
+     winningCells = [cell];
+     rowToCheck = rowIndex+1;
+     colToCheck = colIndex-1;
+     while(colToCheck >=0 && rowToCheck <=5){
+         const cellToCheck = rows[rowToCheck][colToCheck];
+         if(getColorOfCell(cellToCheck) === color){
+             winningCells.push(cellToCheck);
+             rowToCheck++;
+             colToCheck--;
+         } else {
+         break;
+     }
+     }
+     rowToCheck = rowIndex-1;
+     colToCheck = colIndex+1;
+     while(colToCheck <= 6 && rowToCheck >=0){
+         const cellToCheck = rows[rowToCheck][colToCheck];
+         if(getColorOfCell(cellToCheck)=== color){
+             winningCells.push(cellToCheck);
+             rowToCheck--;
+             colToCheck++;
+         } else {
+             break;
+         }
+     }
+ 
+     if(checkWinningCells(winningCells)) return;
+
+
+       //check diagonally bottom right to top left
+       winningCells = [cell];
+       rowToCheck = rowIndex-1;
+       colToCheck = colIndex-1;
+       while(colToCheck >=0 && rowToCheck >=0){
+           const cellToCheck = rows[rowToCheck][colToCheck];
+           if(getColorOfCell(cellToCheck) === color){
+               winningCells.push(cellToCheck);
+               rowToCheck--;
+               colToCheck--;
+           } else {
+           break;
+       }
+       }
+       rowToCheck = rowIndex+1;
+       colToCheck = colIndex+1;
+       while(colToCheck <= 6 && rowToCheck <=5){
+           const cellToCheck = rows[rowToCheck][colToCheck];
+           if(getColorOfCell(cellToCheck)=== color){
+               winningCells.push(cellToCheck);
+               rowToCheck++;
+               colToCheck++;
+           } else {
+               break;
+           }
+       }
+   
+       if(checkWinningCells(winningCells)) return;
+
+       //check for tie
+       let isTie= false;
+       const rowsWithoutTop = rows.slice(0, 6) //remove top row
+       for(const row of rowsWithoutTop){
+        for(const cell of row){
+            const cellClassList = getClassList(cell);
+            if(!cellClassList.includes('yellow') && !cellClassList.includes('red')){
+                return;
+            }
+        }}
+
+        gameActive = false;
+        statusSpan.textContent = "It's a Tie"
+
 };
 
 ////event handlers
