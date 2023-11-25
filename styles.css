@@ -29,7 +29,7 @@ h1 {
 
 .cell {
   align-items: center;
-  background: #4370F1;
+  background: #26355f;
   display: flex;
   height: 100px;
   justify-content: center;
@@ -87,7 +87,7 @@ h1 {
 }
 
 .reset {
-  background-color: #4370F1;
+  background-color: #26355f;
   border-radius: 5px;
   border: none;
   color: white;
@@ -100,11 +100,11 @@ h1 {
 }
 
 .reset:hover {
-  background-color: #1D50F1;
+  background-color: #1d2d62;
 }
 
 .reset:active {
-  background-color: #4d7ef1;
+  background-color: hsla(222, 52%, 43%, 0.164);
 
 }
 
