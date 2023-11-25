@@ -68,12 +68,13 @@ const getColorOfCell = (cell) =>{
 
 
 const checkWinningCells = (cells) =>{
-    if(cells.length < 4) return;
+    if(cells.length < 4) return false;
     gameActive = false; //we have a horizonal winner
     for(const cell of cells){
         cell.classList.add('win')
     };
     statusSpan.textContent = `${yellowNext ? 'Yellow' : 'Red'} Won!`;
+    return true;
 };
 
 const checkGameState = (cell) =>{
@@ -109,11 +110,42 @@ const checkGameState = (cell) =>{
         }
     }
 
-    checkWinningCells(winningCells)
+    let isWinningStatus = checkWinningCells(winningCells);
+    if(isWinningStatus) return;
+
+    //check vertically
+    winningCells = [cell];
+    rowToCheck = rowIndex-1;
+    colToCheck = colIndex;
+    while(rowToCheck >=0){
+        const cellToCheck = rows[rowToCheck][colToCheck];
+        if(getColorOfCell(cellToCheck) === color){
+            winningCells.push(cellToCheck);
+            rowToCheck--;
+        } else {
+        break;
+    }
+    }
+    rowToCheck = rowIndex+1;
+    while(rowToCheck <= 5){
+        const cellToCheck = rows[rowToCheck][colToCheck];
+        if(getColorOfCell(cellToCheck)=== color){
+            winningCells.push(cellToCheck);
+            rowToCheck++
+        } else {
+            break;
+        }
+    }
+
+    if(checkWinningCells(winningCells)){
+        return;
+    }
 };
 
 ////event handlers
 const handleHover = (e) => {
+    console.log(gameActive)
+
     if(!gameActive) return;
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
@@ -130,6 +162,7 @@ const handleMouseOut = (e) => {
 
 
 const handleCellClick = (e) => {
+    console.log(gameActive)
     if(!gameActive) return;
     const cell = e.target;
     const [rowIndex, colIndex] = getRowAndCol(cell);
@@ -165,6 +198,8 @@ for(const row of rows){
 }
 
 resetButton.addEventListener('click', () => {
+    console.log(gameActive)
+
     for(const row of rows){
         for(const cell of row){
             cell.classList.remove('red');
